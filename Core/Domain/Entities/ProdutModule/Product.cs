@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.ProdutModule
 {
+    #region Part 9 Product Module Entities
     public class Product : BaseEntity<int>
     {
         public string Name { get; set; } = null!;
@@ -20,5 +21,6 @@ namespace Domain.Entities.ProdutModule
         public ProductType ProductType { get; set; }
         public int TypeId { get; set; } // Foreign Key for ProductType
 
-    }
+    } 
+    #endregion
 }

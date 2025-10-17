@@ -25,6 +25,7 @@ namespace E_Commerce
             });
             builder.Services.AddScoped<IDbInitlizer, DbInitlizer>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+
             #endregion
 
             var app = builder.Build();

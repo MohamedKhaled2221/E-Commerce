@@ -19,6 +19,7 @@ namespace Presistence.Data
             _storeDbContext = storeDbContext;
         }
 
+
         public async  Task InitializeAsync()
         {
             try

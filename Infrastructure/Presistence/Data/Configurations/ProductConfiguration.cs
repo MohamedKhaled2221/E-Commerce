@@ -19,6 +19,7 @@ namespace Presistence.Data.Configurations
                   .HasForeignKey(p => p.BrandId);
 
 
+
             builder.HasOne(p => p.ProductType)
                    .WithMany()
                    .HasForeignKey(p => p.TypeId);
