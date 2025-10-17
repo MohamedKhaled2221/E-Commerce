@@ -20,7 +20,8 @@ namespace Presistence.Data
         }
 
 
-        public async  Task InitializeAsync()
+        #region Part 11 Data Seeding 
+        public async Task InitializeAsync()
         {
             try
             {
@@ -73,7 +74,7 @@ namespace Presistence.Data
 
                     }
                 }
-             
+
 
                 await _storeDbContext.SaveChangesAsync();
             }
@@ -84,4 +85,5 @@ namespace Presistence.Data
             }
         }
     }
-}
+} 
+#endregion
