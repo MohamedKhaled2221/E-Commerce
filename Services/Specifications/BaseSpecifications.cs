@@ -22,7 +22,7 @@ namespace Services.Specifications
         public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = new();
 
         // p => p.ProductBrand , p=> p.ProductType
-        protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
+        protected void AddIncludes(Expression<Func<TEntity, object>> includeExpression)
         {
             IncludeExpressions.Add(includeExpression);
         }
