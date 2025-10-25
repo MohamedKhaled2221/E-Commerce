@@ -9,6 +9,7 @@ using Shared.Dtos;
 
 namespace Presention.Controllers
 {
+    #region Part 4 Product Controller
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController(IServiceManager serviceManager) : ControllerBase
@@ -43,5 +44,6 @@ namespace Presention.Controllers
             return Ok(product);
         }
         #endregion
-    }
+    } 
+    #endregion
 }
