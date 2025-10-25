@@ -9,12 +9,13 @@ using Domain.Entities;
 
 namespace Services.Specifications
 {
-    internal abstract class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> where TEntity :BaseEntity<TKey>
+    #region Part 7 Speceifications Implementation 
+    internal abstract class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         protected BaseSpecifications(Expression<Func<TEntity, bool>>? criteria)
         {
             Criteria = criteria;
-            
+
         }
         public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
 
@@ -25,5 +26,6 @@ namespace Services.Specifications
         {
             IncludeExpressions.Add(includeExpression);
         }
-    }
+    } 
+    #endregion
 }
