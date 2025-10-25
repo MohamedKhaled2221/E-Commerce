@@ -16,6 +16,7 @@ namespace Services.MappingProfile
 {
     internal class PictureUrlResolver(IConfiguration configuration) : IValueResolver<Product, ProductResultDto, string>
     {
+        #region Part 5 Picture Url Resolver
         public string Resolve(Product source, ProductResultDto destination, string destMember, ResolutionContext context)
         {
             // https://localhost:7006 +  images/products/ItalianChickenMarinade.png
@@ -28,6 +29,7 @@ namespace Services.MappingProfile
 
             return $"{configuration["BaseUrl"]}{source.PictureUrl}";
 
-        }
+        } 
+        #endregion
     }
 }
