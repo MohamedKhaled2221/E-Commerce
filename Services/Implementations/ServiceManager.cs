@@ -9,12 +9,14 @@ using Services.Abstraction.Contracts;
 
 namespace Services.Implementations
 {
-    public class ServiceManager(IUnitOfWork unitOfWork , IMapper mapper) : IServiceManager
+    #region Part 3 Service Manager
+    public class ServiceManager(IUnitOfWork unitOfWork, IMapper mapper) : IServiceManager
     {
-        private readonly Lazy<IProductService> _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork,mapper));
+        private readonly Lazy<IProductService> _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
 
         public IProductService ProductService => _productService.Value;
 
-        
-    }
+
+    } 
+    #endregion
 }
