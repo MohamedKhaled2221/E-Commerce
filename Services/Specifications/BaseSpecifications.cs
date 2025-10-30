@@ -44,7 +44,7 @@ namespace Services.Specifications
            => OrderByDescending = orderByDescExpression;
 
         #endregion
-        #region Pagination
+        #region Part 3 , 4 , 5 Pagination
         public int Skip {get; private set;}
 
         public int Take { get; private set; }
@@ -57,6 +57,7 @@ namespace Services.Specifications
             Take = PageSize;
             Skip = (pageIndex - 1) * PageSize;
         }
+
         #endregion
 
     } 
