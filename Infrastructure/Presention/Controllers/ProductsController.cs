@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction.Contracts;
+using Shared;
 using Shared.Dtos;
+using Shared.Enums;
 
 namespace Presention.Controllers
 {
@@ -16,8 +18,9 @@ namespace Presention.Controllers
     {
         #region Get All Products
         [HttpGet] // GET : BaseUrl/api/Products
-        public async Task<ActionResult<IEnumerable<ProductResultDto>>> GetAllProducts()
-        => Ok(await serviceManager.ProductService.GetAllProductsAsync());
+        public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery]ProductSpecParams parameters)
+
+        => Ok(await serviceManager.ProductService.GetAllProductsAsync(parameters));
 
         #endregion
 

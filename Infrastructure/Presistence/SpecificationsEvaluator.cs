@@ -25,6 +25,17 @@ namespace Presistence
 
                 query = specifications.IncludeExpressions.Aggregate(query, (current, include) => current.Include(include));
             }
+
+            if (specifications.OrderBy != null)
+                query = query.OrderBy(specifications.OrderBy);
+
+            else if (specifications.OrderByDescending != null)
+                query = query.OrderByDescending(specifications.OrderByDescending);
+            
+            if (specifications.IsPaginated)
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
+
+
             return query;
         }
     } 

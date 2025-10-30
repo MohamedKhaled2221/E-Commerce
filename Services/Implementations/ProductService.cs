@@ -8,7 +8,9 @@ using Domain.Contracts;
 using Domain.Entities.ProdutModule;
 using Services.Abstraction.Contracts;
 using Services.Specifications;
+using Shared;
 using Shared.Dtos;
+using Shared.Enums;
 
 namespace Services.Implementations
 {
@@ -28,13 +30,18 @@ namespace Services.Implementations
 
         }
 
-        public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync()
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductSpecParams parameters)
         {
-            var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications());
+            var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(new ProductWithBrandAndTypeSpecifications(parameters));
 
             var productsResult = _mapper.Map<IEnumerable<ProductResultDto>>(products);
+            var pageSize = productsResult.Count();
 
-            return productsResult;
+            var totaCount = await _unitOfWork.GetRepository<Product,int>().CountAsync( new ProductCountSpecifications(parameters));
+
+            return new PaginatedResult<ProductResultDto>(parameters.PageIndex , pageSize, totaCount, productsResult);
+
+
 
         }
 
