@@ -14,14 +14,16 @@ namespace Services.Specifications
     {
         // Get all Products
         //  // query = _dbContext.Set<Product>().Include(p => p.ProductBrand).Include(p => p.ProductType)
-        public ProductWithBrandAndTypeSpecifications(ProductSpecParams parameters) 
-            : base(product =>
-            (!parameters.TypeId.HasValue || product.TypeId==parameters.TypeId.Value) 
-            && (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) && 
-                (string.IsNullOrEmpty(parameters.Search) || product.Name.ToLower().Contains
-                 (parameters.Search.ToLower().Trim())))
-            
-            
+        #region Part 2 Add Filtering Specifications
+        public ProductWithBrandAndTypeSpecifications(ProductSpecParams parameters)
+          : base(product =>
+          (!parameters.TypeId.HasValue || product.TypeId == parameters.TypeId.Value)
+          && (!parameters.BrandId.HasValue || product.BrandId == parameters.BrandId.Value) &&
+              (string.IsNullOrEmpty(parameters.Search) || product.Name.ToLower().Contains
+               (parameters.Search.ToLower().Trim())))
+
+        #endregion
+
         {
             AddIncludes(p => p.ProductBrand);
             AddIncludes(p => p.ProductType);

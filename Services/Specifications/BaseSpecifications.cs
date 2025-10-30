@@ -21,6 +21,8 @@ namespace Services.Specifications
         public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
         #endregion
 
+
+
         #region Include
         public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = new();
         // p => p.ProductBrand , p=> p.ProductType
@@ -29,14 +31,16 @@ namespace Services.Specifications
             IncludeExpressions.Add(includeExpression);
         }
         #endregion
-        #region Sorting [ OrderBy , OrderByDescendng ]
+        #region Part 1 Sorting [ OrderBy , OrderByDescendng ]
+
+
         public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
 
         public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
         protected void SetOrderBy(Expression<Func<TEntity, object>> orderByExpression) // OrderBy(p=>p.Name)
            => OrderBy = orderByExpression;
 
-        protected void SetOrderByDescending(Expression<Func<TEntity, object>> orderByDescExpression) // OrderBy(p=>p.Name)
+        protected void SetOrderByDescending(Expression<Func<TEntity, object>> orderByDescExpression) 
            => OrderByDescending = orderByDescExpression;
 
         #endregion
