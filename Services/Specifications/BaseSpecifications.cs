@@ -44,7 +44,7 @@ namespace Services.Specifications
            => OrderByDescending = orderByDescExpression;
 
         #endregion
-        #region Part 3 , 4 , 5 Pagination
+        #region Part 3 , 4 , 5 , 6 Pagination
         public int Skip {get; private set;}
 
         public int Take { get; private set; }
