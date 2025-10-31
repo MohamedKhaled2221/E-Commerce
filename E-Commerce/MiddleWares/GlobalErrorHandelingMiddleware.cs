@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Domain.Exceptions;
 using Shared.Error_Models;
 
 namespace E_Commerce.MiddleWares
@@ -41,6 +42,12 @@ namespace E_Commerce.MiddleWares
             // Set Default Status code ==> 500 
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             // Return Standard Response
+            httpContext.Response.StatusCode = ex switch
+            {
+                NotFoundException => (int)HttpStatusCode.NotFound, //404
+                _ => (int)HttpStatusCode.InternalServerError //500
+            };
+
             var response = new ErrorDetails  // C# Object
             {
                 StatusCode = httpContext.Response.StatusCode,

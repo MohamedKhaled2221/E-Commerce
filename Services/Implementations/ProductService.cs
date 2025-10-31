@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities.ProdutModule;
+using Domain.Exceptions;
 using Services.Abstraction.Contracts;
 using Services.Specifications;
 using Shared;
@@ -55,8 +56,9 @@ namespace Services.Implementations
         public async Task<ProductResultDto> GetProductByIdAsync(int id)
         {
             var product = await _unitOfWork.GetRepository<Product, int>().GetAsync(new ProductWithBrandAndTypeSpecifications(id));
-            var productResult = _mapper.Map<ProductResultDto>(product);
-            return productResult;
+            //var productResult = _mapper.Map<ProductResultDto>(product);
+            //return productResult;
+            return product is null ? throw new ProductNotFoundException(id) : _mapper.Map<ProductResultDto>(product);
         }
     } 
     #endregion
