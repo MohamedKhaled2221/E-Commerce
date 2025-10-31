@@ -1,6 +1,7 @@
 
 using System.Reflection.Metadata;
 using Domain.Contracts;
+using E_Commerce.MiddleWares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence.Data;
@@ -42,6 +43,7 @@ namespace E_Commerce
            await InitializeDbAsync(app);
 
             #region Configure Ketrel MiddleWares
+            app.UseMiddleware<GlobalErrorHandelingMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
