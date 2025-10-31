@@ -1,7 +1,9 @@
 
 using System.Reflection.Metadata;
 using Domain.Contracts;
+using E_Commerce.Factories;
 using E_Commerce.MiddleWares;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence.Data;
@@ -20,22 +22,27 @@ namespace E_Commerce
             #region Configure Services
 
             // Add services to the container.
-          
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDbInitlizer, DbInitlizer>();
-            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(o => { }, typeof(Services.AssemblyReference).Assembly);
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
+            builder.Services.Configure<ApiBehaviorOptions>( options =>
+                {
+                    options.InvalidModelStateResponseFactory =
+                    ApiResponseFactory.CustomValidationErrorResponse;
+                 });
              
             #endregion
 

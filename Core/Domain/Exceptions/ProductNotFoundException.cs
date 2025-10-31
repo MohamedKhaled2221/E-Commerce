@@ -13,6 +13,7 @@ namespace Domain.Exceptions
         {
 
         } 
+
         #endregion
     }
 }
