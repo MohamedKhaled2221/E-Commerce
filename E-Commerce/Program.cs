@@ -21,11 +21,12 @@ namespace E_Commerce
         {
             var builder = WebApplication.CreateBuilder(args);
             #region Configure Services
+            #region Part 6 Clean Program Service Extensions
 
             // Add services to the container.
 
             //WebbAPI Services
-          builder.Services.AddWebApiServices();
+            builder.Services.AddWebApiServices();
 
 
             // Infrastructure Services
@@ -39,7 +40,7 @@ namespace E_Commerce
             #endregion
 
             var app = builder.Build();
-         
+
 
             #region Configure Ketrel MiddleWares
             app.UseCustomExceptionMiddleWares();
@@ -48,9 +49,10 @@ namespace E_Commerce
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-             app.UseSwaggerMiddleWares();
+                app.UseSwaggerMiddleWares();
             }
 
+            #endregion
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
