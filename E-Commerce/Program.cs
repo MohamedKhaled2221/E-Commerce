@@ -1,6 +1,7 @@
 
 using System.Reflection.Metadata;
 using Domain.Contracts;
+using E_Commerce.Extensions;
 using E_Commerce.Factories;
 using E_Commerce.MiddleWares;
 using Microsoft.AspNetCore.Mvc;
@@ -23,39 +24,31 @@ namespace E_Commerce
 
             // Add services to the container.
 
+            //WebbAPI Services
+          builder.Services.AddWebApiServices();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            builder.Services.AddScoped<IDbInitlizer, DbInitlizer>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(o => { }, typeof(Services.AssemblyReference).Assembly);
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            // Infrastructure Services
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
-            builder.Services.Configure<ApiBehaviorOptions>( options =>
-                {
-                    options.InvalidModelStateResponseFactory =
-                    ApiResponseFactory.CustomValidationErrorResponse;
-                 });
-             
+            // Core Services
+            builder.Services.AddCoreServices();
+
+
+
             #endregion
 
             var app = builder.Build();
-           await InitializeDbAsync(app);
+         
 
             #region Configure Ketrel MiddleWares
-            app.UseMiddleware<GlobalErrorHandelingMiddleware>();
+            app.UseCustomExceptionMiddleWares();
+
+            await app.SeedDbAsync();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+             app.UseSwaggerMiddleWares();
             }
 
             app.UseHttpsRedirection();
@@ -69,14 +62,7 @@ namespace E_Commerce
 
             app.Run();
   
-             async Task InitializeDbAsync (WebApplication app)
-            {
-                // Create Object FromType That implements IDbInitlizer
-                using var scope = app.Services.CreateScope();
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitlizer>();
-
-                await dbInitializer.InitializeAsync();
-            }
+           
         }
     }
 }
