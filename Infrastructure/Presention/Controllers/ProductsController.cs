@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction.Contracts;
 using Shared;
 using Shared.Dtos;
 using Shared.Enums;
+using Shared.Error_Models;
 
 namespace Presention.Controllers
 {
@@ -38,6 +40,14 @@ namespace Presention.Controllers
         #endregion
 
         #region Get Product By Id
+
+        #region Part 7 Improve Swagger Documentation
+        [ProducesResponseType(typeof(ProductResultDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
+
+        #endregion
         [HttpGet("{id:int}")] // GET : BaseUrl/api/Products/{id}
         public async Task<ActionResult<ProductResultDto>> GetProductById(int id)
         {
