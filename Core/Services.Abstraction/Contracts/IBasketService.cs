@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Shared.Dtos.BasketModule;
+
+namespace Services.Abstraction.Contracts
+{
+    public interface IBasketService
+    {
+        // GET , Delete , Create Or Update Basket
+        public Task<BasketDTO> GetBasketAsync(string id);
+
+        public Task<bool> DeleteBasketAsync(string id);
+
+        public Task<BasketDTO> CreateOrUpdateBasketAsync(BasketDTO basket);
+    }
+}

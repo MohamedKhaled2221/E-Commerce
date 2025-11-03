@@ -10,7 +10,7 @@ using AutoMapper.Execution;
 using AutoMapper.Internal;
 using Domain.Entities.ProdutModule;
 using Microsoft.Extensions.Configuration;
-using Shared.Dtos;
+using Shared.Dtos.ProductModule;
 
 namespace Services.MappingProfile
 {

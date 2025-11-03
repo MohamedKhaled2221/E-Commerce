@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shared;
-using Shared.Dtos;
+using Shared.Dtos.ProductModule;
 using Shared.Enums;
 
 namespace Services.Abstraction.Contracts
