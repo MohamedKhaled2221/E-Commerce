@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.Entities.BasketModule
+{
+    #region Part 11 Basket Module Entities
+    public class BasketItem
+    {
+        public int Id { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string PictureUrl { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+    } 
+    #endregion
+}
