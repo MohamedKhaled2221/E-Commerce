@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
+using Presistence.Identity;
 using Presistence.Repositories;
 using StackExchange.Redis;
 
@@ -16,6 +17,10 @@ namespace E_Commerce.Extensions
             services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
+            services.AddDbContext<StoreIdentityContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("IdentitySQLConnection"));
             });
             #region Part 13 Add Redis Service To DI Container
             services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
