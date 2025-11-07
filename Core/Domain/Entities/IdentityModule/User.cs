@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.IdentityModule
 {
-    #region Part 2 Identity Class % Identity Context
+    #region Part 2 Identity Class Identity Context
     public class User : IdentityUser
     {
         public string DisplayName { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
 ﻿using Domain.Contracts;
+using Domain.Entities.IdentityModule;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
 using Presistence.Identity;
@@ -24,8 +26,24 @@ namespace E_Commerce.Extensions
             });
             #region Part 13 Add Redis Service To DI Container
             services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
-
+            services.ConfigureIdentityServices();
             #endregion
+            return services;
+        }
+
+        public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<StoreIdentityContext>();
+            
             return services;
         }
 
