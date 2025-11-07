@@ -55,26 +55,36 @@ namespace E_Commerce.MiddleWares
 
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
         {
-            // Set Content Typr ==> Apploication\json
+            // 2. Change Content Type ==> Apploication\json
             httpContext.Response.ContentType = "application/json";
-            // Set Default Status code ==> 500 
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            // Return Standard Response
-            httpContext.Response.StatusCode = ex switch
+
+            var response = new ErrorDetails  // C# Object --> Json Object
             {
-                NotFoundException => (int)HttpStatusCode.NotFound, //404
-                _ => (int)HttpStatusCode.InternalServerError //500
+                // StatusCode = httpContext.Response.StatusCode,
+                ErrorMessage = ex.Message
             };
 
-            var response = new ErrorDetails  // C# Object
+
+            // Change Status Code Based On Exception Type (500 & 400)
+            httpContext.Response.StatusCode = ex switch
             {
-                StatusCode = httpContext.Response.StatusCode,
-                ErrorMessage = ex.Message
-            }.ToString();
+                NotFoundException => StatusCodes.Status404NotFound, //404
+                UnAuthorizedException => StatusCodes.Status401Unauthorized, //401
+                ValidationException validationException => HandleValidationException(validationException,response), //400
+                _ => StatusCodes.Status500InternalServerError //500
+            };
+           
+            response.StatusCode = httpContext.Response.StatusCode;
 
 
-            await httpContext.Response.WriteAsync(response);
-        } 
+            await httpContext.Response.WriteAsync(response.ToString());
+        }
+
+        private int HandleValidationException(ValidationException validationException, ErrorDetails response)
+        {
+           response.Errors = validationException.Errors;
+            return StatusCodes.Status400BadRequest;
+        }
         #endregion
     }
 }
