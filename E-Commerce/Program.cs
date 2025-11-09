@@ -33,7 +33,7 @@ namespace E_Commerce
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
             // Core Services
-            builder.Services.AddCoreServices();
+            builder.Services.AddCoreServices(builder.Configuration);
 
 
 
@@ -55,6 +55,8 @@ namespace E_Commerce
             #endregion
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

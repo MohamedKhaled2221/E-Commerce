@@ -9,15 +9,17 @@ using System.Threading.Tasks;
 using Domain.Entities.IdentityModule;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstraction.Contracts;
+using Shared;
 using Shared.Dtos.IdentityModule;
 using ValidationException = Domain.Exceptions.ValidationException;
 
 namespace Services.Implementations
 {
     #region Part 4 Authentication Service
-    internal class AuthenticationService(UserManager<User> _userManager) : IAuthenticationService
+    internal class AuthenticationService(UserManager<User> _userManager, IOptions<JwtOptions> options) : IAuthenticationService
     {
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
@@ -63,6 +65,7 @@ namespace Services.Implementations
         // Method For Generate Token
         private async Task<string> CreateTokenAsync(User user)
         {
+            var jwtOptions = options.Value;
             // Craete claims for User 
             var authclaims = new List<Claim>
             {
@@ -74,18 +77,18 @@ namespace Services.Implementations
             foreach (var role in roles)
                 authclaims.Add(new Claim(ClaimTypes.Role, role));
             // Create Security Key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
-            ("a5bc82e5dfaa1c363a6e0f558fcd23e0fb311598d835dee8de9f20b0f820668d"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey));
+
 
             // Create Alg
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // return Token
             var token = new JwtSecurityToken(
-                issuer: "BaseUrl", // Backend URL
-                audience: "AngularProj",
+                issuer: jwtOptions.Issuer, // Backend URL
+                audience: jwtOptions.Audience,
                 claims: authclaims,
-                expires: DateTime.UtcNow.AddDays(30),
+                expires: DateTime.UtcNow.AddDays(jwtOptions.DurationInDays),
                 signingCredentials: creds
                 );
 

@@ -1,10 +1,14 @@
-﻿using Domain.Contracts;
+﻿using System.Text;
+using Domain.Contracts;
 using Domain.Entities.IdentityModule;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Presistence.Data;
 using Presistence.Identity;
 using Presistence.Repositories;
+using Shared;
 using StackExchange.Redis;
 
 namespace E_Commerce.Extensions
@@ -27,6 +31,7 @@ namespace E_Commerce.Extensions
             #region Part 13 Add Redis Service To DI Container
             services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
             services.ConfigureIdentityServices();
+            services.ConfigureJwt(configuration);
             #endregion
             return services;
         }
@@ -44,6 +49,34 @@ namespace E_Commerce.Extensions
             })
             .AddEntityFrameworkStores<StoreIdentityContext>();
             
+            return services;
+        }
+
+        public static IServiceCollection ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Jwt Configuration
+          var jwtOptions=  configuration.GetSection("JwtOptions").Get<JwtOptions>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  // LOG or Not 
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                                                                                                                                           
+            }).AddJwtBearer(options=>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
+                    
+                };
+            });
+            services.AddAuthorization();
+
+
             return services;
         }
 
