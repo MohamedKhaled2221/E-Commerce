@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.IdentityModule;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstraction.Contracts;
 using Shared.Dtos.IdentityModule;
 using ValidationException = Domain.Exceptions.ValidationException;
@@ -29,7 +32,7 @@ namespace Services.Implementations
             return new UserResultDto(
                 user.DisplayName,
                 user.Email!,
-                "This is Token"
+               await CreateTokenAsync(user)
                 );
         }
 
@@ -52,9 +55,46 @@ namespace Services.Implementations
             return new UserResultDto(
                 user.DisplayName,
                 user.Email!,
-                "This is Token"
+               await CreateTokenAsync(user)
                 );
         }
-    } 
+
+        #region part 6 Jwt , Authentication Service Create Token
+        // Method For Generate Token
+        private async Task<string> CreateTokenAsync(User user)
+        {
+            // Craete claims for User 
+            var authclaims = new List<Claim>
+            {
+               new Claim(ClaimTypes.Name, user.DisplayName),
+                new Claim(ClaimTypes.Email, user.Email!)
+            };
+            // Add Roles To Claims If Exists
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+                authclaims.Add(new Claim(ClaimTypes.Role, role));
+            // Create Security Key
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
+            ("a5bc82e5dfaa1c363a6e0f558fcd23e0fb311598d835dee8de9f20b0f820668d"));
+
+            // Create Alg
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            // return Token
+            var token = new JwtSecurityToken(
+                issuer: "BaseUrl", // Backend URL
+                audience: "AngularProj",
+                claims: authclaims,
+                expires: DateTime.UtcNow.AddDays(30),
+                signingCredentials: creds
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
+        } 
+        #endregion
+    }
     #endregion
+   
+
 }
