@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using Domain.Contracts;
+using Domain.Entities.BasketModule;
+using Domain.Entities.OrderModule;
+using Domain.Entities.ProdutModule;
+using Domain.Exceptions;
+using Services.Abstraction.Contracts;
+using Shared.Dtos.OrderModule;
+
+namespace Services.Implementations
+{
+    #region Part 5 Order Service Create Order 
+    internal class OrderService(IMapper mapper
+   , IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IOrderService
+    {
+        public async Task<OrderResult> CreateOrderAsync(OrderRequest request, string userEmail)
+        {
+            // 1 . Shpping Address
+            var address = mapper.Map<ShippingAddress>(request.ShippingAddress);
+
+
+            // 2. Order Items => BaskedId  --> BasketItems --> OrderItems
+            var basket = await basketRepository.GetBasketAsync(request.BasketId) ?? throw new BasketNotFoundException(request.BasketId);
+
+
+            // Get selected Items at Basket from Product Repository
+            var orderItems = new List<OrderItem>();
+            foreach (var item in basket.Items)
+            {
+                var product = await unitOfWork.GetRepository<Product, int>()
+                     .GetAsync(item.Id) ?? throw new ProductNotFoundException(item.Id);
+                orderItems.Add(CreateOrderItem(item, product));
+
+            }
+
+            // 3. Delivery Method  
+            var deliveryMethod = await unitOfWork.GetRepository<DeliveryMethod, int>()
+                .GetAsync(request.DeliveryMethodId) ?? throw new DeliveryMethodNotFoundException(request.DeliveryMethodId);
+
+            // 4. Subtotal --> item.Price * item.Quantity
+            var subtotal = orderItems.Sum(item => item.Price * item.Quantity);
+
+            // 5 . Create Order
+            var order = new Order(userEmail, address, orderItems, deliveryMethod, subtotal);
+            //  Save to Database
+            await unitOfWork.GetRepository<Order, Guid>()
+                        .AddAsync(order);
+            await unitOfWork.SaveChangesAsync();
+            // Map from Order to OrderResult and return
+            return mapper.Map<OrderResult>(order);
+        }
+
+        private OrderItem CreateOrderItem(BasketItem item, Product product)
+        => new OrderItem(new ProductinOrderItem(product.Id, product.Name, product.PictureUrl), item.Quantity, product.Price);
+
+
+
+
+
+        public Task<IEnumerable<DeliveryMethodResult>> GetDeliveryMethodsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OrderResult> GetOrderByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<OrderResult>> GetOrdersByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+    } 
+    #endregion
+}

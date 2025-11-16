@@ -12,11 +12,11 @@ namespace Domain.Entities.OrderModule
         {
             
         }
-        public OrderItem(ProductinOrderItem product, decimal price, int quantity)
+        public OrderItem(ProductinOrderItem product, int quantity, decimal price)
         {
             Product = product;
-            Price = price;
             Quantity = quantity;
+            Price = price;
         }
 
         public ProductinOrderItem Product { get; set; }
