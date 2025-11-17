@@ -12,7 +12,7 @@ namespace Shared.Dtos.OrderModule
         public string ProductName { get; init; }
         public string PictureUrl { get; init; }
         public decimal Price { get; init; }
-        public int Quantity { get;  ; }
+        public int Quantity { get;  init; }
 
     }
 }

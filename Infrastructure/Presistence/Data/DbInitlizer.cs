@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Entities.IdentityModule;
+using Domain.Entities.OrderModule;
 using Domain.Entities.ProdutModule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,22 @@ namespace Presistence.Data
                     }
                 }
 
+                #region Part 8 Delivery Methods { Data Seeding } 
+                if (!_storeDbContext.DeliveryMethods.Any())
+                {
+                    // Read Types From File As String 
+                    var methodsData = await File.ReadAllTextAsync(@"..\Infrastructure\Presistence\Data\DataSeeding\delivery.json");
+                    // Transform From Json into C# Object
+                    var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(methodsData);
+
+                    // Adding Data to Database & Saving Changes
+                    if (methods != null && methods.Count > 0)
+                    {
+                        await _storeDbContext.DeliveryMethods.AddRangeAsync(methods);
+
+                    }
+                } 
+                #endregion
 
                 await _storeDbContext.SaveChangesAsync();
             }
