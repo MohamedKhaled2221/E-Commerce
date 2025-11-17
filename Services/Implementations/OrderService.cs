@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities.BasketModule;
 using Domain.Entities.OrderModule;
@@ -14,12 +9,15 @@ using Shared.Dtos.OrderModule;
 
 namespace Services.Implementations
 {
+
     #region Part 5 Order Service Create Order 
-    internal class OrderService(IMapper mapper
-   , IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IOrderService
+    internal class OrderService(IMapper mapper , 
+    IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IOrderService
+
     {
         public async Task<OrderResult> CreateOrderAsync(OrderRequest request, string userEmail)
         {
+
             // 1 . Shpping Address
             var address = mapper.Map<ShippingAddress>(request.ShippingAddress);
 
@@ -57,15 +55,15 @@ namespace Services.Implementations
 
         private OrderItem CreateOrderItem(BasketItem item, Product product)
         => new OrderItem(new ProductinOrderItem(product.Id, product.Name, product.PictureUrl), item.Quantity, product.Price);
-
-
-
-
-
-        public Task<IEnumerable<DeliveryMethodResult>> GetDeliveryMethodsAsync()
+        #endregion
+        #region Part 6 Order Service [ Get Delivery Methods ] 
+        public async Task<IEnumerable<DeliveryMethodResult>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
-        }
+            var deliveryMethods = await unitOfWork.GetRepository<DeliveryMethod, int>()
+                .GetAllAsync();
+            return mapper.Map<IEnumerable<DeliveryMethodResult>>(deliveryMethods);
+        } 
+        #endregion
 
         public Task<OrderResult> GetOrderByIdAsync(Guid id)
         {
@@ -77,5 +75,6 @@ namespace Services.Implementations
             throw new NotImplementedException();
         }
     } 
-    #endregion
+
+  
 }
