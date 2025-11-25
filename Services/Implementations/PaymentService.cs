@@ -48,6 +48,7 @@ namespace Services.Implementations
 
 
             }
+
             // check if DeliveryMethod Is Selected Or not
             if (!basket.DeliveryMethodId.HasValue) throw new Exception("Delivery Method Is Not Selected");
 
@@ -99,6 +100,7 @@ namespace Services.Implementations
             return mapper.Map<BasketDTO>(basket);
 
         } 
+
         #endregion
     }
 }

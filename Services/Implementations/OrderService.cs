@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Domain.Contracts;
 using Domain.Entities.BasketModule;
 using Domain.Entities.OrderModule;
@@ -16,6 +17,7 @@ namespace Services.Implementations
     IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IOrderService
 
     {
+        #region Part 3 Refactor Create Order & OrderWithPaymentSpecifications
         public async Task<OrderResult> CreateOrderAsync(OrderRequest request, string userEmail)
         {
 
@@ -42,17 +44,29 @@ namespace Services.Implementations
                 .GetAsync(request.DeliveryMethodId) ?? throw new DeliveryMethodNotFoundException(request.DeliveryMethodId);
 
             // 4. Subtotal --> item.Price * item.Quantity
+            var orderrepo = unitOfWork.GetRepository<Order, Guid>();
+
+            var exsistingOrder = await orderrepo
+                .GetAsync(new OrderWithPaymentIntentSpecifications(basket.PaymentIntentId!));
+
+            if (exsistingOrder != null)
+                orderrepo.Delete(exsistingOrder);
+
             var subtotal = orderItems.Sum(item => item.Price * item.Quantity);
 
             // 5 . Create Order
-            var order = new Order(userEmail, address, orderItems, deliveryMethod, subtotal);
+
+            var order = new Order(userEmail, address, orderItems, deliveryMethod, subtotal, basket.PaymentIntentId!);
+
             //  Save to Database
-            await unitOfWork.GetRepository<Order, Guid>()
+
+            await orderrepo
                         .AddAsync(order);
             await unitOfWork.SaveChangesAsync();
             // Map from Order to OrderResult and return
             return mapper.Map<OrderResult>(order);
-        }
+        } 
+        #endregion
 
         private OrderItem CreateOrderItem(BasketItem item, Product product)
         => new OrderItem(new ProductinOrderItem(product.Id, product.Name, product.PictureUrl), item.Quantity, product.Price);
