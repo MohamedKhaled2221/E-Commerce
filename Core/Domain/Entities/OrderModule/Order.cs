@@ -8,13 +8,17 @@ namespace Domain.Entities.OrderModule
         {
 
         }
-        public Order(string userEmail, ShippingAddress shippingAddress, ICollection<OrderItem> orderItems, DeliveryMethod deliveryMethod, decimal subtotal)
+        public Order(string userEmail, 
+            ShippingAddress shippingAddress,
+            ICollection<OrderItem> orderItems,
+            DeliveryMethod deliveryMethod, decimal subtotal, string paymentIntentId)
         {
             UserEmail = userEmail;
             ShippingAddress = shippingAddress;
             OrderItems = orderItems;
             DeliveryMethod = deliveryMethod;
             Subtotal = subtotal;
+            PaymentIntentId = paymentIntentId;
         }
 
         public string UserEmail { get; set; } = string.Empty;
@@ -30,7 +34,7 @@ namespace Domain.Entities.OrderModule
         // OrderItem.Price * OrderItem.Quantity
         // Total == Subtotal + DeliveryMethod.Price [ Derieved Atribute ] --> DTO OR Mapping Profile
         public decimal Subtotal { get; set; }
-        public string PaymentIntentId { get; set; } = string.Empty;
+        public string PaymentIntentId { get; set; }
 
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
 
