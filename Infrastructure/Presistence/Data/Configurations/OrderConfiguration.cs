@@ -23,7 +23,7 @@ namespace Presistence.Data.Configurations
             builder.Property(o => o.PaymentStatus)
                    .HasConversion(
                         status => status.ToString(),
-                        value => Enum.Parse<OderPaymentStatus>(value)
+                        value => Enum.Parse<OrderPaymentStatus>(value)
                    );
             builder.HasOne(o => o.DeliveryMethod)
                    .WithMany()

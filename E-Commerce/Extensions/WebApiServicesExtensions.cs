@@ -17,15 +17,17 @@ namespace E_Commerce.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.ConfigureSwagger();
+            #region Part 6 Setting Cors Policy
             services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .WithOrigins("http://localhost:4200");
-                });
-            });
+                    options.AddPolicy("CorsPolicy", builder =>
+                    {
+                        builder.AllowAnyHeader()
+                               .AllowAnyMethod()
+                               .WithOrigins("http://localhost:4200");
+                    });
+                }); 
+            #endregion
 
             return services;
         }

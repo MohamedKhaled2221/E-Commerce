@@ -16,7 +16,17 @@ namespace Presention.Controllers
         public async Task<ActionResult<BasketDTO>> CreateOrUpdatePaymentntent(string basketId)
      => Ok(await serviceManager.PaymentService.CreateOrUpdatePaymentIntentAsync(basketId));
 
+        #region Part 7 Stripe WebHook EndPoint and Connect Your Localserver to Stripe 
+        [HttpPost("webHook")]
+        public async Task<IActionResult> WebHook()
+        {
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            var signatureHeader = Request.Headers["Stripe-Signature"];
 
+            await serviceManager.PaymentService.UpdateOrderPaymentStatusAsync(json, signatureHeader);
+            return new EmptyResult();
+        } 
+        #endregion
 
     } 
     #endregion

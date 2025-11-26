@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.OrderModule
 {
-    public enum OderPaymentStatus
+    public enum OrderPaymentStatus
     {
         Pending=0,
         PaymentReceived=1,

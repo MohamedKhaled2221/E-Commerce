@@ -27,7 +27,7 @@ namespace Domain.Entities.OrderModule
         public ICollection<OrderItem> OrderItems { get; set; }
 
 
-        public OderPaymentStatus PaymentStatus { get; set; } = OderPaymentStatus.Pending;
+        public OrderPaymentStatus PaymentStatus { get; set; } = OrderPaymentStatus.Pending;
         public DeliveryMethod DeliveryMethod { get; set; }
         public int? DeliveryMethodId { get; set; }
 
