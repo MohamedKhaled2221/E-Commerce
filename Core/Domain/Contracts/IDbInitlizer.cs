@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace Domain.Contracts
 {
     public interface IDbInitlizer
+
     {
         public Task InitializeAsync();
+        public Task InitializeIdentityAsync();
+
     }
 }

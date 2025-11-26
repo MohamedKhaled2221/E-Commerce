@@ -12,23 +12,26 @@ namespace Presistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
+        #region Part 13 Unit of Work
         private readonly StoreDbContext _dbContext;
         private readonly ConcurrentDictionary<string, object> _repositories;
-        public UnitOfWork(StoreDbContext dbContext) {
+        public UnitOfWork(StoreDbContext dbContext)
+        {
             _dbContext = dbContext;
             _repositories = new();
         }
 
-        public async Task<int> SaveChangesAsync()=> await _dbContext.SaveChangesAsync();
+        public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 
         public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
 
         => (IGenericRepository<TEntity, TKey>)_repositories.GetOrAdd(typeof(TEntity).Name, (_) => new GenericRepository<TEntity, TKey>(_dbContext));
-            // return new GenericRepository<TEntity, TKey>(_dbContext);
-            // Req --> 20 Instance From GenericRepo
-            // Key --> Name of entity ["Product", "ProductType", "ProductBrand",etc] ---> string
-            //Value --> Object of GenericRepo 
-            // Peoduct --> new GenericRepository<Product,int>
+
+        // return new GenericRepository<TEntity, TKey>(_dbContext);
+        // Req --> 20 Instance From GenericRepo
+        // Key --> Name of entity ["Product", "ProductType", "ProductBrand",etc] ---> string
+        //Value --> Object of GenericRepo 
+        // Peoduct --> new GenericRepository<Product,int>
 
 
 
@@ -38,3 +41,5 @@ namespace Presistence.Repositories
 
     }
 }
+
+#endregion

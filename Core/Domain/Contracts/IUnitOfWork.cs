@@ -17,5 +17,6 @@ namespace Domain.Contracts
         // New Generic Repository<Product, int>();
         // New Generic Repository<ProductType, int>();
         // New Generic Repository<ProductBrand, int>();
+
     }
 }

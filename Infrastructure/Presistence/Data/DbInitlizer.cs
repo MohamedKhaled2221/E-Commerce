@@ -6,7 +6,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
+using Domain.Entities.IdentityModule;
+using Domain.Entities.OrderModule;
 using Domain.Entities.ProdutModule;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Presistence.Data
@@ -14,12 +17,21 @@ namespace Presistence.Data
     public class DbInitlizer : IDbInitlizer
     {
         private readonly StoreDbContext _storeDbContext;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DbInitlizer(StoreDbContext storeDbContext) {
+        public DbInitlizer(StoreDbContext storeDbContext,
+          UserManager<User> userManager
+            , RoleManager<IdentityRole> roleManager)
+        {
             _storeDbContext = storeDbContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public async  Task InitializeAsync()
+
+        #region Part 11 Data Seeding 
+        public async Task InitializeAsync()
         {
             try
             {
@@ -72,7 +84,23 @@ namespace Presistence.Data
 
                     }
                 }
-             
+
+                #region Part 8 Delivery Methods { Data Seeding } 
+                if (!_storeDbContext.DeliveryMethods.Any())
+                {
+                    // Read Types From File As String 
+                    var methodsData = await File.ReadAllTextAsync(@"..\Infrastructure\Presistence\Data\DataSeeding\delivery.json");
+                    // Transform From Json into C# Object
+                    var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(methodsData);
+
+                    // Adding Data to Database & Saving Changes
+                    if (methods != null && methods.Count > 0)
+                    {
+                        await _storeDbContext.DeliveryMethods.AddRangeAsync(methods);
+
+                    }
+                } 
+                #endregion
 
                 await _storeDbContext.SaveChangesAsync();
             }
@@ -82,5 +110,50 @@ namespace Presistence.Data
                 throw;
             }
         }
+
+        #region Part 3 Seed Users & Roles , Configure Identity 
+        public async Task InitializeIdentityAsync()
+        {
+            //Set Default Users & Roles
+
+            // Seed Roles 
+            if (!_roleManager.Roles.Any())
+            {
+                // Admin & Super Admin
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+            }
+            // Seed Users
+
+            if (!_userManager.Users.Any())
+            {
+                var adminUser = new User()
+                {
+                    DisplayName = "Admin",
+                    Email = "Admin@gmail.com",
+                    UserName = "Admin",
+                    PhoneNumber = "123456789"
+                };
+                var superadminUser = new User()
+                {
+                    DisplayName = "Super Admin",
+                    Email = "SuperAdmin@gmail.com",
+                    UserName = "SuperAdmin",
+                    PhoneNumber = "123456789"
+                };
+
+
+                await _userManager.CreateAsync(adminUser, "Passw0rd");
+                await _userManager.CreateAsync(superadminUser, "Passw0rd");
+
+                // Assign Roles To Users
+                await _userManager.AddToRoleAsync(adminUser, "Admin");
+                await _userManager.AddToRoleAsync(superadminUser, "SuperAdmin");
+            }
+
+
+        } 
+        #endregion
     }
 }
+#endregion

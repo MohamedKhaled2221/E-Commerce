@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.Entities.OrderModule
+{
+    public enum OrderPaymentStatus
+    {
+        Pending=0,
+        PaymentReceived=1,
+        PaymentFailed=2,
+        Refunded=3,
+        Canceled=4
+    }
+}
