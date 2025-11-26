@@ -55,7 +55,7 @@ namespace E_Commerce
             #endregion
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
             app.UseAuthorization();

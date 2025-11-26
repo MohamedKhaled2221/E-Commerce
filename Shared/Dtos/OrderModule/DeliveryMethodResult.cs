@@ -13,6 +13,6 @@ namespace Shared.Dtos.OrderModule
         public string Description { get; init; }
         public string DeliveryTime { get; init; } // Within 3 Days
 
-        public decimal Price { get; init; }
+        public decimal Cost { get; init; }
     }
 }

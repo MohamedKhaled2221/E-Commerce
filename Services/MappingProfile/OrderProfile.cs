@@ -22,11 +22,12 @@ namespace Services.MappingProfile
              .ForMember(d => d.PictureUrl, o => o.MapFrom(s => s.Product.PictureUrl))
               .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom<OrderItemPictureUrlResolver>());
             CreateMap<Order, OrderResult>()
-                  .ForMember(d => d.PaymentStatus, o => o.MapFrom(s => s.PaymentStatus))
+                  .ForMember(d => d.Status, o => o.MapFrom(s => s.PaymentStatus))
                   .ForMember(d => d.DeliveryMethod, o => o.MapFrom(s => s.DeliveryMethod.ShortName))
                     .ForMember(d => d.Total, o => o.MapFrom(s => s.Subtotal + s.DeliveryMethod.Price));
 
-            CreateMap<DeliveryMethod, DeliveryMethodResult>();
+            CreateMap<DeliveryMethod, DeliveryMethodResult>()
+                .ForMember(d => d.Cost, o => o.MapFrom(s => s.Price));
         }
 
     } 

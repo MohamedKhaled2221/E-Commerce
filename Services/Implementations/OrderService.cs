@@ -22,7 +22,7 @@ namespace Services.Implementations
         {
 
             // 1 . Shpping Address
-            var address = mapper.Map<ShippingAddress>(request.ShippingAddress);
+            var address = mapper.Map<ShippingAddress>(request.ShipToAddress);
 
 
             // 2. Order Items => BaskedId  --> BasketItems --> OrderItems

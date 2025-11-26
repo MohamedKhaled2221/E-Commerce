@@ -14,8 +14,19 @@ namespace E_Commerce.Extensions
                 options.InvalidModelStateResponseFactory =
                 ApiResponseFactory.CustomValidationErrorResponse;
             });
-
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
             services.ConfigureSwagger();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .WithOrigins("http://localhost:4200");
+                });
+            });
+
             return services;
         }
 
