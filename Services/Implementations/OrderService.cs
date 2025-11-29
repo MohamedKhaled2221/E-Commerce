@@ -13,7 +13,7 @@ namespace Services.Implementations
 {
 
     #region Part 5 Order Service Create Order 
-    internal class OrderService(IMapper mapper , 
+    public class OrderService(IMapper mapper , 
     IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IOrderService
 
     {

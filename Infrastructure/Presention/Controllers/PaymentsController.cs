@@ -23,7 +23,7 @@ namespace Presention.Controllers
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             var signatureHeader = Request.Headers["Stripe-Signature"];
 
-            await serviceManager.PaymentService.UpdateOrderPaymentStatusAsync(json, signatureHeader);
+            await serviceManager.PaymentService.UpdateOrderPaymentStatusAsync(json, signatureHeader!);
             return new EmptyResult();
         } 
         #endregion

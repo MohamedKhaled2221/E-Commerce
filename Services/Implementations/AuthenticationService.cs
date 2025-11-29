@@ -22,7 +22,7 @@ using ValidationException = Domain.Exceptions.ValidationException;
 namespace Services.Implementations
 {
     #region Part 4 Authentication Service
-    internal class AuthenticationService(UserManager<User> _userManager,
+    public class AuthenticationService(UserManager<User> _userManager,
         IOptions<JwtOptions> options, IMapper mapper) : IAuthenticationService
     {
        

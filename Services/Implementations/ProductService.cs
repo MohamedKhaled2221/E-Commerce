@@ -16,7 +16,7 @@ using Shared.Enums;
 namespace Services.Implementations
 {
     #region Part 2 Product Service 
-    internal class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
+    public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
 
 

@@ -16,7 +16,7 @@ namespace Services.Implementations
 {
     #region Part 3 Service Manager
     public class ServiceManager(IUnitOfWork unitOfWork, IMapper mapper , IBasketRepository basketRepository, 
-        UserManager<User> userManager, IOptions<JwtOptions> options, IConfiguration configuration) : IServiceManager
+        UserManager<User> userManager, IOptions<JwtOptions> options, IConfiguration configuration)
     {
         private readonly Lazy<IProductService> _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
         private readonly Lazy<IBasketService> _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
