@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presention.Attributes;
 using Services.Abstraction.Contracts;
 using Shared;
 using Shared.Dtos.ProductModule;
@@ -19,6 +20,7 @@ namespace Presention.Controllers
     public class ProductsController(IServiceManager serviceManager) :ApiControllerBase
     {
         #region Get All Products
+        [RedisCache]
         [HttpGet] // GET : BaseUrl/api/Products
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery]ProductSpecParams parameters)
 

@@ -19,6 +19,7 @@ namespace E_Commerce.Extensions
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICacheService, CacheService>();
 
 
             services.AddScoped<Func<IProductService>>(provider =>
@@ -31,6 +32,8 @@ namespace E_Commerce.Extensions
             () => provider.GetRequiredService<IPaymentService>());
             services.AddScoped<Func<IOrderService>>(provider =>
             () => provider.GetRequiredService<IOrderService>());
+            services.AddScoped<Func<ICacheService>>(provider =>
+            () => provider.GetRequiredService<ICacheService>());
 
             services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
             return services;

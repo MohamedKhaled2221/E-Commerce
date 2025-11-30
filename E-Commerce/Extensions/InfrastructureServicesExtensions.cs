@@ -17,9 +17,11 @@ namespace E_Commerce.Extensions
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-           services.AddScoped<IDbInitlizer, DbInitlizer>();
+            // Infrastructure Services Registration
+            services.AddScoped<IDbInitlizer, DbInitlizer>();
            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
             services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));

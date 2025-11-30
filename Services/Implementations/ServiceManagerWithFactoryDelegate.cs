@@ -11,7 +11,7 @@ namespace Services.Implementations
     public class ServiceManagerWithFactoryDelegate
 (Func<IProductService> _productFactory, Func<IAuthenticationService> _authenticationFactory,
 Func<IBasketService> _basketFactory, Func<IPaymentService> _paymentFactory
-, Func<IOrderService> _orderFactory) : IServiceManager
+, Func<IOrderService> _orderFactory,Func<ICacheService> _cacheFactory) : IServiceManager
     {
 
         public IProductService ProductService => _productFactory.Invoke();
@@ -24,7 +24,7 @@ Func<IBasketService> _basketFactory, Func<IPaymentService> _paymentFactory
 
         public IPaymentService PaymentService => _paymentFactory.Invoke();
 
-
+        public ICacheService CacheService => _cacheFactory.Invoke() ;
     } 
     #endregion
 }
